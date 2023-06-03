@@ -21,6 +21,7 @@ class Floor : public IDrawable{
         int y_;
 
         void draw(Display *disp, Window const &win, GC const &gc) const override  {
+            XSetForeground(disp, gc, 0x0000FF);
             XFillRectangle(disp, win, gc, x_, y_, lenght_, width_);
             XFlush(disp);
         }
@@ -54,8 +55,8 @@ inline auto WindowDeleter = [](Display* disp) noexcept {
 
 //Singleton class for managing X11 display and window
 class DisplayManager {
-    static constexpr auto window_width_ = 800; 
-    static constexpr auto window_height_ = 600;
+    static constexpr auto window_width_ = 600; 
+    static constexpr auto window_height_ = 800;
     static constexpr auto border_width_ = 0;
 
     const char *window_title_ = "Project 4";
@@ -82,27 +83,19 @@ class DisplayManager {
         return instance;
     }
 
-    Display& get_display() const {
-        return *disp_;
+    int get_width() const {
+        return window_width_;
     };
 
-    int& get_screen() {
-        return screen_;
-    };
-
-    GC& get_gc() {
-        return gc_;
-    };
-
-    Window& get_window() {
-        return window_;
+    int get_height() const {
+        return window_height_;
     };
 
     ~DisplayManager(){
         XDestroyWindow(disp_.get(), window_);
     }
     
-// `cont` should be a container of IDrawable objects (e.g., std::vector<std::shared_ptr<IDrawable>>)
+// `cont` should be a container of IDrawable objects (e.g std::vector<std::shared_ptr<IDrawable>>)
     void event_loop(auto &cont){
         while(1) {
             XNextEvent(disp_.get(), &event_);
