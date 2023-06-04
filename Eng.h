@@ -1,53 +1,9 @@
-#define Double_Buffering
-#include <X11/Xlib.h>
-#include <X11/extensions/Xdbe.h> // for double buffering
-#include <X11/Xutil.h>
-#include <memory>
+#include "Actors.h"
 #include <iostream>
 #include <string>
 #include <utility>
 #include <array>
 #include <vector>
-
-class IDrawable{
-    protected:
-        virtual void draw(Display *disp, XdbeBackBuffer, GC const &gc) const = 0;
-        friend class DisplayManager; // only draw objects from DisplayManager 
-    public:
-        virtual ~IDrawable() = default;
-};
-
-class Floor : public IDrawable{
-    private:
-        int lenght_;
-        int width_;
-        int x_;
-        int y_;
-
-        void draw(Display *disp, long unsigned back_buff, GC const &gc) const override  {
-            XSetForeground(disp, gc, 0x0000FF);
-            XFillRectangle(disp, back_buff, gc, x_, y_, lenght_, width_);
-        }
-
-    public:
-        Floor(int lenght, int width,  int x, int y): lenght_(lenght), width_(width),  x_(x), y_(y) {}
-};
-
-class Elevator : public IDrawable{
-    private:
-        int width_;
-        int height_;
-        int x_;
-        int y_;
-
-        void draw(Display *disp, long unsigned back_buff, GC const &gc) const override {
-            
-        }
-
-    public:
-        Elevator( int width, int height, int x, int y):  width_(width), height_(height), x_(x), y_(y) {}
-};
-
 //RAII wrapper for X11 Display
 inline auto WindowDeleter = [](Display* disp) noexcept {
     if(disp)
@@ -122,8 +78,7 @@ class DisplayManager {
     // `cont` should be a container of IDrawable objects (e.g std::vector<std::shared_ptr<IDrawable>>)
     //  the objects will be drawn in the order they are stored in the container
     //  auto is used to allow flexibility in the type of container used
-    void event_loop(auto &cont){
-        while(1) {
+    void render_objects(auto &cont){
             XNextEvent(disp_.get(), &event_);
             if(event_.type == Expose) {
                 // TODO: implement a double buffer solution
@@ -135,9 +90,7 @@ class DisplayManager {
                 }
             }
             if(event_.type == KeyPress) {
-                break;
             }
-        }
     }
     DisplayManager(const DisplayManager&) = delete;
     DisplayManager& operator=(const DisplayManager&) = delete;
