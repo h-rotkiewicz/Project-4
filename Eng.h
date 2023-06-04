@@ -56,7 +56,7 @@ inline auto WindowDeleter = [](Display* disp) noexcept {
 //Singleton class for managing X11 display and window
 class DisplayManager {
     static constexpr auto window_width_ = 600; 
-    static constexpr auto window_height_ = 800;
+    static constexpr auto window_height_ = 700;
     static constexpr auto border_width_ = 0;
 
     const char *window_title_ = "Project 4";

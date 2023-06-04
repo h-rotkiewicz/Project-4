@@ -11,22 +11,21 @@ constexpr int floor_lenght = 200;
 
 void Create_Floors(auto &cont, int window_width, int window_height, int number_of_floors){
     int floor_spaceing = window_height*2/(number_of_floors);
-
     //left
-    int k = 1;
+    int k = 0;
     for(int i = 0; i < number_of_floors;k++, i++){
-        cont[i] = new Floor(floor_lenght, floor_width, 0, k*floor_spaceing);
+        cont[i] = new Floor(floor_lenght, floor_width, 0, k*floor_spaceing-);
     }
 
     //right
     for(int i = number_of_floors/2, k=1; i < number_of_floors; k++,i++){
-        cont[i] = new Floor(floor_lenght, floor_width, window_width-floor_lenght, k*floor_spaceing);
+        cont[i] = new Floor(floor_lenght, floor_width, window_width-floor_lenght, floor_spaceing/2 + k*(floor_spaceing));
     }
 }
 
 int main() {
     DisplayManager& disp = DisplayManager::GetInstance();
-    const int number_of_floors = 12;
+    const int number_of_floors = 6;
     std::array<IDrawable*,number_of_floors> cont;
     Create_Floors(cont, disp.get_width(), disp.get_height(),number_of_floors);
     disp.event_loop(cont);
