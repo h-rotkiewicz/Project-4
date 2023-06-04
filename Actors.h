@@ -83,12 +83,12 @@ inline void Create_Floors(ObjectHandler &Handler, int window_width, int window_h
     //left
     int k = 1;
     for(int i = 0; i < number_of_floors;k++, i++){
-        Handler.add_object<Floor>(floor_lenght,floor_width,0, k*floor_spaceing);
+        if(i%2==1)Handler.add_object<Floor>(floor_lenght,floor_width,0, k*floor_spaceing);
     }
 
     //right
     for(int i = number_of_floors/2, k=1; i < number_of_floors; k++,i++){
-        Handler.add_object<Floor>(floor_lenght, floor_width,window_width-floor_lenght, k*floor_spaceing);
+        if(i%2==0)Handler.add_object<Floor>(floor_lenght, floor_width,window_width-floor_lenght, k*floor_spaceing);
     }
 }
 
