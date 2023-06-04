@@ -14,12 +14,12 @@ void Create_Floors(auto &cont, int window_width, int window_height, int number_o
     //left
     int k = 0;
     for(int i = 0; i < number_of_floors;k++, i++){
-        cont[i] = new Floor(floor_lenght, floor_width, 0, k*floor_spaceing-);
+        cont[i] = new Floor(floor_lenght, floor_width, 0, k*floor_spaceing+floor_spaceing);
     }
 
     //right
     for(int i = number_of_floors/2, k=1; i < number_of_floors; k++,i++){
-        cont[i] = new Floor(floor_lenght, floor_width, window_width-floor_lenght, floor_spaceing/2 + k*(floor_spaceing));
+        if(i!=(number_of_floors/2))cont[i] = new Floor(floor_lenght, floor_width, window_width-floor_lenght, -floor_spaceing/2 + k*(floor_spaceing));
     }
 }
 
