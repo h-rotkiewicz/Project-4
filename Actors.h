@@ -54,7 +54,6 @@ class Elevator : public IMoveable{
         void move() override {}
     public:
         Elevator(uint lenght, uint width,  int x, int y): IMoveable(lenght, width, x, y) {}
-
 };
 
 //since 2 objects have nearly the same constructor, we can use a template to avoid code duplication
@@ -90,25 +89,18 @@ class ObjectObserver{
             if constexpr (std::is_base_of_v<IMoveable, OBJECT>)
             {
                 moveable_container_.push_back(ObjectFactory<OBJECT>(width,height,x,y));
-                std::cout << "IMoveable" << std::endl;
             }
             else{
                 container_.push_back(ObjectFactory<OBJECT>(width,height,x,y));
-                std::cout << "IDrawable" << std::endl;
             }
         }
 
-
-    void remove_object(int index){
-        container_.erase(container_.begin() + index);
-    }
     // So we can use range based for loop in DisplayManager
-    auto begin() const {
-        return container_.begin();
+    auto& get_moveable() const {
+        return moveable_container_;
     }
-
-    auto end() const {
-        return container_.end();
+    auto& get_drawable() const {
+        return container_;
     }
 
     void create_floors(int window_width, int window_height, int number_of_floors){
@@ -130,5 +122,3 @@ class ObjectObserver{
         add_object<Elevator>(window_width-2*floor_lenght - 100, elevator_height,window_width/2 - elevator_width + 50, window_height/2);
     }
 };
-
-

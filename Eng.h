@@ -27,7 +27,7 @@ class DisplayManager {
     int major_;
     XdbeSwapInfo swap_info_;
     bool double_buffering_ = true;
-    
+
     DisplayManager(){ 
         if(!disp_) {
             throw std::runtime_error("Failed to open X11 display");
@@ -68,28 +68,32 @@ class DisplayManager {
     int get_height() const {
         return window_height_;
     };
- 
+
     ~DisplayManager(){
         XDestroyWindow(disp_.get(), window_);
     }
 
-    // `cont` should be a container of IDrawable objects (e.g std::vector<std::shared_ptr<IDrawable>>)
-    //  the objects will be drawn in the order they are stored in the container
-    //  auto is used to allow flexibility in the type of container used
-    void render_objects(auto &cont){
+    //should probalby simplify this
+    //to a non template function with defined argument types
+    //but for now it works at least for the current use case
+    template <typename ...Containers>
+        void render_objects(Containers&... conts){
+            auto Render = [&](auto &cont){
+                for(auto &obj : cont)
+                    obj->draw(disp_.get(),*chosen_buffer_, gc_);
+            };
+
             XNextEvent(disp_.get(), &event_);
             if(event_.type == Expose) {
-                // TODO: implement a double buffer solution
-                for(auto &i : cont) {
-                    i->draw(disp_.get(), *chosen_buffer_, gc_);
-                }
+                (Render(conts), ...);
                 if(double_buffering_) {
                     XdbeSwapBuffers(disp_.get(), &swap_info_, 1);
                 }
             }
             if(event_.type == KeyPress) {
             }
-    }
+        }
+
     DisplayManager(const DisplayManager&) = delete;
     DisplayManager& operator=(const DisplayManager&) = delete;
     DisplayManager& operator=(DisplayManager&&)=delete;
