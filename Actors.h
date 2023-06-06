@@ -67,12 +67,7 @@ inline auto ObjectFactory(int width, int height,int x,int y) {
     using ReturnType = std::conditional_t<std::is_base_of_v<IMoveable, T>,
           std::unique_ptr<IMoveable>,
           std::unique_ptr<IDrawable>>;
-    if constexpr (std::is_base_of_v<IMoveable, T>) {
         return ReturnType(std::make_unique<T>(width, height, x, y));
-    } else {
-        return ReturnType(std::make_unique<Floor>(width, height, x, y));
-    }
-
 }
 
 class ObjectObserver{
