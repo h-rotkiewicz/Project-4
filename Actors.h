@@ -3,49 +3,58 @@
 #include <X11/Xutil.h>
 #include <vector>
 #include <memory>
-
-constexpr int floor_width = 20;
-constexpr int floor_lenght = 200;
-constexpr int elevator_width = 20;
-constexpr int elevator_height = 50;
+#include <iostream>
+#include <type_traits>
 
 class IDrawable{
     protected:
+        uint lenght_;
+        uint width_;
+        int x_;
+        int y_;
         virtual void draw(Display *disp, XdbeBackBuffer, GC const &gc) const = 0;
         friend class DisplayManager; // only draw objects from DisplayManager 
     public:
+        IDrawable(uint lenght, uint width,  int x, int y): lenght_(lenght), width_(width),  x_(x), y_(y) {}
+        int get_x() const {
+            return x_;
+        }
+        int get_y() const {
+            return y_;
+        }
         virtual ~IDrawable() = default;
+};
+
+class IMoveable : public IDrawable{
+    protected:
+        virtual void move() = 0;
+        friend class DisplayManager; // only draw objects from DisplayManager 
+    public:
+        virtual ~IMoveable() = default;
+        IMoveable(uint lenght, uint width,  int x, int y): IDrawable(lenght, width, x, y) {}
 };
 
 class Floor : public IDrawable{
     private:
-        int lenght_;
-        int width_;
-        int x_;
-        int y_;
-
         void draw(Display *disp, long unsigned back_buff, GC const &gc) const override  {
             XSetForeground(disp, gc, 0x0000FF);
             XFillRectangle(disp, back_buff, gc, x_, y_, lenght_, width_);
         }
 
     public:
-        Floor(int lenght, int width,  int x, int y): lenght_(lenght), width_(width),  x_(x), y_(y) {}
+        Floor(uint lenght, uint width,  int x, int y): IDrawable(lenght, width, x, y) {}
 };
 
-class Elevator : public IDrawable{
+class Elevator : public IMoveable{
     private:
-        int width_;
-        int height_;
-        int x_;
-        int y_;
-
         void draw(Display *disp, long unsigned back_buff, GC const &gc) const override {
-            
+            XSetForeground(disp, gc, 0x0000FF);
+            XFillRectangle(disp, back_buff, gc, x_, y_, lenght_, width_);
         }
-
+        void move() override {}
     public:
-        Elevator( int width, int height, int x, int y):  width_(width), height_(height), x_(x), y_(y) {}
+        Elevator(uint lenght, uint width,  int x, int y): IMoveable(lenght, width, x, y) {}
+
 };
 
 //since 2 objects have nearly the same constructor, we can use a template to avoid code duplication
@@ -53,43 +62,73 @@ class Elevator : public IDrawable{
 template <typename T>
 concept is_IDrawable = std::is_base_of_v<IDrawable, T>;
 
-template <is_IDrawable T>
-inline std::unique_ptr<IDrawable> ObjectFactory(int width, int height,int x,int y) {
-    return std::make_unique<T>(width, height, x, y);
+//Return type deduction based on inheritance
+template <is_IDrawable T >
+inline auto ObjectFactory(int width, int height,int x,int y) {
+    using ReturnType = std::conditional_t<std::is_base_of_v<IMoveable, T>,
+          std::unique_ptr<IMoveable>,
+          std::unique_ptr<IDrawable>>;
+    if constexpr (std::is_base_of_v<IMoveable, T>) {
+        return ReturnType(std::make_unique<T>(width, height, x, y));
+    } else {
+        return ReturnType(std::make_unique<Floor>(width, height, x, y));
+    }
+
 }
 
-class ObjectHandler{
+class ObjectObserver{
     std::vector<std::unique_ptr<IDrawable>> container_;
+    std::vector<std::unique_ptr<IMoveable>> moveable_container_;
+    const int floor_width = 20;
+    const int floor_lenght = 200;
+    const int elevator_width = 100;
+    const int elevator_height = 300;
+
     public:
     template <is_IDrawable OBJECT>
-    void add_object(int width, int height,int x, int y){
-        container_.push_back(ObjectFactory<OBJECT>(width,height,x,y));
-    }
+        void add_object(int width, int height,int x, int y){
+            if constexpr (std::is_base_of_v<IMoveable, OBJECT>)
+            {
+                moveable_container_.push_back(ObjectFactory<OBJECT>(width,height,x,y));
+                std::cout << "IMoveable" << std::endl;
+            }
+            else{
+                container_.push_back(ObjectFactory<OBJECT>(width,height,x,y));
+                std::cout << "IDrawable" << std::endl;
+            }
+        }
+
+
     void remove_object(int index){
         container_.erase(container_.begin() + index);
     }
     // So we can use range based for loop in DisplayManager
-    auto begin(){
+    auto begin() const {
         return container_.begin();
     }
-    auto end(){
+
+    auto end() const {
         return container_.end();
     }
+
+    void create_floors(int window_width, int window_height, int number_of_floors){
+        int floor_spaceing = window_height*2/(number_of_floors);
+
+        //left
+        int k = 1;
+        for(int i = 0; i < number_of_floors;k++, i++){
+            if(i%2==1)add_object<Floor>(floor_lenght,floor_width,0, k*floor_spaceing);
+        }
+
+        //right
+        for(int i = number_of_floors/2, k=1; i < number_of_floors; k++,i++){
+            if(i%2==0)add_object<Floor>(floor_lenght, floor_width,window_width-floor_lenght, k*floor_spaceing);
+        }
+    }
+
+    void create_elevator(int window_width, int window_height){
+        add_object<Elevator>(window_width-2*floor_lenght - 100, elevator_height,window_width/2 - elevator_width + 50, window_height/2);
+    }
 };
-
-inline void Create_Floors(ObjectHandler &Handler, int window_width, int window_height, int number_of_floors){
-    int floor_spaceing = window_height*2/(number_of_floors);
-
-    //left
-    int k = 1;
-    for(int i = 0; i < number_of_floors;k++, i++){
-        if(i%2==1)Handler.add_object<Floor>(floor_lenght,floor_width,0, k*floor_spaceing);
-    }
-
-    //right
-    for(int i = number_of_floors/2, k=1; i < number_of_floors; k++,i++){
-        if(i%2==0)Handler.add_object<Floor>(floor_lenght, floor_width,window_width-floor_lenght, k*floor_spaceing);
-    }
-}
 
 
