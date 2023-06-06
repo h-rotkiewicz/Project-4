@@ -48,7 +48,7 @@ class Floor : public IDrawable{
 class Elevator : public IMoveable{
     private:
         void draw(Display *disp, long unsigned back_buff, GC const &gc) const override {
-            XSetForeground(disp, gc, 0x0000FF);
+            XSetForeground(disp, gc, 0x00FF00);
             XFillRectangle(disp, back_buff, gc, x_, y_, lenght_, width_);
         }
         void move() override {}
@@ -75,8 +75,8 @@ class ObjectObserver{
     std::vector<std::unique_ptr<IMoveable>> moveable_container_;
     const int floor_width = 20;
     const int floor_lenght = 200;
-    const int elevator_width = 100;
-    const int elevator_height = 300;
+    const int elevator_width = 200;
+    const int elevator_height = 120;
 
     public:
     template <is_IDrawable OBJECT>
@@ -99,21 +99,21 @@ class ObjectObserver{
     }
 
     void create_floors(int window_width, int window_height, int number_of_floors){
-        int floor_spaceing = window_height*2/(number_of_floors);
+        int floor_spaceing = window_height/(number_of_floors);
 
         //left
         int k = 1;
         for(int i = 0; i < number_of_floors;k++, i++){
-            if(i%2==1)add_object<Floor>(floor_lenght,floor_width,0, k*floor_spaceing);
+            add_object<Floor>(floor_lenght,floor_width,0, k*floor_spaceing);
         }
 
         //right
         for(int i = number_of_floors/2, k=1; i < number_of_floors; k++,i++){
-            if(i%2==0)add_object<Floor>(floor_lenght, floor_width,window_width-floor_lenght, k*floor_spaceing);
+            add_object<Floor>(floor_lenght, floor_width,window_width-floor_lenght, k*floor_spaceing+floor_spaceing/2);
         }
     }
 
     void create_elevator(int window_width, int window_height){
-        add_object<Elevator>(window_width-2*floor_lenght - 100, elevator_height,window_width/2 - elevator_width + 50, window_height/2);
+        add_object<Elevator>(elevator_width, elevator_height,floor_lenght, window_height-elevator_height);
     }
 };

@@ -5,7 +5,7 @@
  * 2. separete the declaration from the implementation
  * */
 
-const auto number_of_floors = 12;
+const auto number_of_floors = 3;
 
 int main() {
     try{
