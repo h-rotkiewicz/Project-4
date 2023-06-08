@@ -1,0 +1,3 @@
+/home/oskar_2/Documents/projekt_4/Project-4/build/CMakeFiles/MyProject.dir
+/home/oskar_2/Documents/projekt_4/Project-4/build/CMakeFiles/edit_cache.dir
+/home/oskar_2/Documents/projekt_4/Project-4/build/CMakeFiles/rebuild_cache.dir
