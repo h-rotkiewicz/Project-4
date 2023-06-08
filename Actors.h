@@ -16,8 +16,8 @@ class IDrawable{
         friend class DisplayManager; // only draw objects from DisplayManager 
     public:
         IDrawable(uint length, uint width,  int x, int y): length_(length), width_(width),  x_(x), y_(y) {}
-        int get_x() const {}
-        int get_y() const {}
+        int get_x() const;
+        int get_y() const;
         virtual ~IDrawable() = default;
 };
 
@@ -41,7 +41,7 @@ class Elevator : public IMoveable{
     private:
     const int wall_thickness=10;
         void draw(Display *disp, long unsigned back_buff, GC const &gc) const override;
-        void move() override {}
+        void move() override;
     public:
         Elevator(uint length, uint width,  int x, int y): IMoveable(length, width, x, y) {}
 };

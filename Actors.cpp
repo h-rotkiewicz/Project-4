@@ -26,7 +26,6 @@ void Elevator::draw(Display *disp, long unsigned back_buff, GC const &gc) const 
 }
 
 void Elevator::move() override{}
-
 void Human::draw(Display *disp, long unsigned back_buff, GC const &gc) const override{
 }
 
