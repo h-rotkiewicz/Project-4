@@ -73,7 +73,7 @@ class DisplayManager {
         XDestroyWindow(disp_.get(), window_);
     }
 
-    //should probalby simplify this
+    //should probably simplify this
     //to a non template function with defined argument types
     //but for now it works at least for the current use case
     template <typename ...Containers>
