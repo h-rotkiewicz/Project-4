@@ -36,8 +36,29 @@ class DisplayManager {
     //should probably simplify this
     //to a non template function with defined argument types
     //but for now it works at least for the current use case
-    template <typename ...Containers>
-        void render_objects(Containers&... conts);
+   template <typename... Containers>
+    void render_objects(Containers & ...conts)
+    {
+    auto Render = [&](auto &cont)
+    {
+        for (auto &obj : cont)
+            obj->draw(disp_.get(), *chosen_buffer_, gc_);
+    };
+
+    XNextEvent(disp_.get(), &event_);
+    if (event_.type == Expose)
+    {
+            (Render(conts), ...);
+            if (double_buffering_)
+            {
+                XdbeSwapBuffers(disp_.get(), &swap_info_, 1);
+            }
+    }
+    if (event_.type == KeyPress)
+    {
+    }
+    }
+
     DisplayManager(const DisplayManager&) = delete;
     DisplayManager& operator=(const DisplayManager&) = delete;
     DisplayManager& operator=(DisplayManager&&)=delete;

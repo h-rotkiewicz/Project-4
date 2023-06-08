@@ -1,4 +1,4 @@
-#include "include/Eng.h"
+#include "Eng.h"
 
 DisplayManager::DisplayManager() { 
         
@@ -45,25 +45,4 @@ DisplayManager::~DisplayManager(){
     XDestroyWindow(disp_.get(), window_);
 }
 
-template <typename... Containers>
-void DisplayManager::render_objects(Containers &...conts)
-{
-    auto Render = [&](auto &cont)
-    {
-        for (auto &obj : cont)
-            obj->draw(disp_.get(), *chosen_buffer_, gc_);
-    };
 
-    XNextEvent(disp_.get(), &event_);
-    if (event_.type == Expose)
-    {
-            (Render(conts), ...);
-            if (double_buffering_)
-            {
-                XdbeSwapBuffers(disp_.get(), &swap_info_, 1);
-            }
-    }
-    if (event_.type == KeyPress)
-    {
-    }
-}

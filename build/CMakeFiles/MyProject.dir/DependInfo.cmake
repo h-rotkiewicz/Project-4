@@ -8,13 +8,13 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/hubert/projects/oskar-fork/bin/Actors.cpp" "CMakeFiles/MyProject.dir/bin/Actors.cpp.o" "gcc" "CMakeFiles/MyProject.dir/bin/Actors.cpp.o.d"
-  "/home/hubert/projects/oskar-fork/bin/Eng.cpp" "CMakeFiles/MyProject.dir/bin/Eng.cpp.o" "gcc" "CMakeFiles/MyProject.dir/bin/Eng.cpp.o.d"
-  "/home/hubert/projects/oskar-fork/bin/main.cpp" "CMakeFiles/MyProject.dir/bin/main.cpp.o" "gcc" "CMakeFiles/MyProject.dir/bin/main.cpp.o.d"
+  "/home/oskar_2/Documents/projekt_4/Project-4/bin/Actors.cpp" "CMakeFiles/MyProject.dir/bin/Actors.cpp.o" "gcc" "CMakeFiles/MyProject.dir/bin/Actors.cpp.o.d"
+  "/home/oskar_2/Documents/projekt_4/Project-4/bin/Eng.cpp" "CMakeFiles/MyProject.dir/bin/Eng.cpp.o" "gcc" "CMakeFiles/MyProject.dir/bin/Eng.cpp.o.d"
+  "/home/oskar_2/Documents/projekt_4/Project-4/bin/main.cpp" "CMakeFiles/MyProject.dir/bin/main.cpp.o" "gcc" "CMakeFiles/MyProject.dir/bin/main.cpp.o.d"
   )
 
-# Targets to which this target links which contain Fortran sources.
-set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.

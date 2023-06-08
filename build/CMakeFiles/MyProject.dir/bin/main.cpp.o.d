@@ -1,6 +1,7 @@
-CMakeFiles/MyProject.dir/bin/Actors.cpp.o: \
- /home/oskar_2/Documents/projekt_4/Project-4/bin/Actors.cpp \
+CMakeFiles/MyProject.dir/bin/main.cpp.o: \
+ /home/oskar_2/Documents/projekt_4/Project-4/bin/main.cpp \
  /usr/include/stdc-predef.h \
+ /home/oskar_2/Documents/projekt_4/Project-4/include/Eng.h \
  /home/oskar_2/Documents/projekt_4/Project-4/include/Actors.h \
  /usr/include/X11/Xlib.h /usr/include/x86_64-linux-gnu/sys/types.h \
  /usr/include/features.h /usr/include/features-time64.h \

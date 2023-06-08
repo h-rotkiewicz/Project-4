@@ -75,8 +75,12 @@ class ObjectObserver{
     template <is_IDrawable OBJECT>
         void add_object(int width, int height,int x, int y);
     // So we can use range based for loop in DisplayManager
-    auto& get_moveable() const;
-    auto& get_drawable() const;
+    auto& get_moveable() const {
+    return moveable_container_;
+    }
+    auto& get_drawable() const {
+        return container_;
+    }
     void create_floors(int window_width, int window_height, int number_of_floors);
     void create_elevator(int window_width, int window_height);
 };

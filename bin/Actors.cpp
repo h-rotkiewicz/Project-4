@@ -10,12 +10,12 @@ int IDrawable::get_y() const {
     return y_;
 }
 
-void Floor::draw(Display *disp, long unsigned back_buff, GC const &gc) const override{
+void Floor::draw(Display *disp, long unsigned back_buff, GC const &gc) const{
     XSetForeground(disp, gc, 0x0000FF);
     XFillRectangle(disp, back_buff, gc, x_, y_, length_, width_);
 }
 
-void Elevator::draw(Display *disp, long unsigned back_buff, GC const &gc) const override{
+void Elevator::draw(Display *disp, long unsigned back_buff, GC const &gc) const{
     XSetForeground(disp, gc, 0xDCDCDC);
     XFillRectangle(disp, back_buff, gc, x_, y_, length_, width_); //back wall   
     XSetForeground(disp, gc, 0x00FFFF); 
@@ -25,14 +25,11 @@ void Elevator::draw(Display *disp, long unsigned back_buff, GC const &gc) const 
     XFillRectangle(disp, back_buff, gc, x_+length_-wall_thickness, y_+wall_thickness, wall_thickness, width_-wall_thickness); //right wall
 }
 
-void Elevator::move() override{}
-void Human::draw(Display *disp, long unsigned back_buff, GC const &gc) const override{
+void Elevator::move(){}
+void Human::draw(Display *disp, long unsigned back_buff, GC const &gc) const{
 }
 
-void Human::move() override{}
-
-template <typename T>
-concept is_IDrawable = std::is_base_of_v<IDrawable, T>;
+void Human::move(){}
 
 template <is_IDrawable T >
 inline auto ObjectFactory(int width, int height,int x,int y) {
@@ -73,11 +70,11 @@ void ObjectObserver::add_object(int width, int height,int x, int y){
             }
 }
 
-auto& ObjectObserver::get_moveable() const {
-    return moveable_container_;
-}
+// auto& ObjectObserver::get_moveable() const {
+//     return moveable_container_;
+// }
 
-auto& ObjectObserver::get_drawable() const {
-        return container_;
-    }
+// auto& ObjectObserver::get_drawable() const {
+//         return container_;
+//     }
     
