@@ -1,0 +1,3 @@
+/home/hubert/projects/oskar-fork/build/CMakeFiles/MyProject.dir
+/home/hubert/projects/oskar-fork/build/CMakeFiles/edit_cache.dir
+/home/hubert/projects/oskar-fork/build/CMakeFiles/rebuild_cache.dir
