@@ -10,12 +10,11 @@ inline auto WindowDeleter = [](Display* disp) noexcept {
         XCloseDisplay(disp);
 };
 
-
 //Singleton class for managing X11 display and window
 class DisplayManager {
-    static constexpr uint window_width_ = 600; 
-    static constexpr uint window_height_ = 700;
-    static constexpr uint border_width_ = 0;
+    const uint window_width_ = 600; 
+    const uint window_height_ = 700;
+    const uint border_width_ = 0;
     std::unique_ptr<Display, decltype(WindowDeleter)> disp_  = {XOpenDisplay(nullptr), WindowDeleter};
     Window window_;
     XdbeBackBuffer back_buffer_;
@@ -33,34 +32,35 @@ class DisplayManager {
     int get_width() const;
     int get_height() const;
     ~DisplayManager();
-    //should probably simplify this
-    //to a non template function with defined argument types
-    //but for now it works at least for the current use case
-   template <typename... Containers>
-    void render_objects(Containers & ...conts)
+    void swap_buffers();
+    void render_objects(ObjectObserver const &obs)
     {
-    auto Render = [&](auto &cont)
-    {
-        for (auto &obj : cont)
-            obj->draw(disp_.get(), *chosen_buffer_, gc_);
-    };
+        for(auto& i : obs.get_drawable()){
+            i->draw(disp_.get(),*chosen_buffer_,gc_);
+        }
 
-    XNextEvent(disp_.get(), &event_);
-    if (event_.type == Expose)
-    {
-            (Render(conts), ...);
-            if (double_buffering_)
+        for(auto& i : obs.get_moveable()){
+            i->draw(disp_.get(),*chosen_buffer_,gc_);
+            i->move();
+        }
+
+        if(XPending(disp_.get())){
+            XNextEvent(disp_.get(), &event_);
+            if (event_.type == Expose)
             {
-                XdbeSwapBuffers(disp_.get(), &swap_info_, 1);
+                //write starting screen or something
             }
-    }
-    if (event_.type == KeyPress)
-    {
-    }
+
+            //key press p
+            if (event_.type == KeyPress && event_.xkey.keycode == 33)
+            {
+                obs.get_elevator()->set_target(1,1);
+            }
+        }
+        swap_buffers();
     }
 
     DisplayManager(const DisplayManager&) = delete;
     DisplayManager& operator=(const DisplayManager&) = delete;
     DisplayManager& operator=(DisplayManager&&)=delete;
 };
-

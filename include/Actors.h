@@ -6,6 +6,10 @@
 #include <iostream>
 #include <type_traits>
 
+static consteval double get_dt() {
+    return 0.001;
+} 
+
 class IDrawable{
     protected:
         uint length_;
@@ -23,10 +27,22 @@ class IDrawable{
 
 class IMoveable : public IDrawable{
     protected:
-        virtual void move() = 0;
         friend class DisplayManager; // only draw objects from DisplayManager 
+        int x_target_ =-1;
+        int y_target_ =-1;
+        double speed_ = 1;
+        int max_speed_ = 10;
+        double acceleration_ = speed_ * get_dt();
     public:
+        virtual void move() = 0;
+        virtual void set_target(int x, int y) {
+            std::cout << "set target" << std::endl;
+            x_target_ = x;
+            y_target_ = y;
+        }
         virtual ~IMoveable() = default;
+        virtual double get_speed() const = 0;
+        virtual void set_pos(int x, int y);
         IMoveable(uint length, uint width,  int x, int y): IDrawable(length, width, x, y) {}
 };
 
@@ -39,10 +55,11 @@ class Floor : public IDrawable{
 
 class Elevator : public IMoveable{
     private:
-    const int wall_thickness=10;
+        const int wall_thickness=10;
         void draw(Display *disp, long unsigned back_buff, GC const &gc) const override;
         void move() override;
     public:
+        double get_speed() const override;
         Elevator(uint length, uint width,  int x, int y): IMoveable(length, width, x, y) {}
 };
 
@@ -51,6 +68,7 @@ class Human : public IMoveable{
         void draw(Display *disp, long unsigned back_buff, GC const &gc) const override;
         void move() override;
     public:
+        double get_speed() const override;
         Human(uint length, uint width,  int x, int y): IMoveable(length, width, x, y) {}
 };
 
@@ -71,16 +89,26 @@ class ObjectObserver{
     const int floor_length = 200;
     const int elevator_width = 200;
     const int elevator_height = 120;
+    int elevator_index_ = -1;
     public:
     template <is_IDrawable OBJECT>
         void add_object(int width, int height,int x, int y);
-    // So we can use range based for loop in DisplayManager
+
     auto& get_moveable() const {
     return moveable_container_;
     }
+
     auto& get_drawable() const {
         return container_;
     }
+
+    auto& get_elevator() const {
+        if (elevator_index_ == -1){
+            throw std::runtime_error("Elevator not found");
+        }
+        return moveable_container_[elevator_index_]; 
+    }
+
     void create_floors(int window_width, int window_height, int number_of_floors);
     void create_elevator(int window_width, int window_height);
 };

@@ -1,10 +1,9 @@
-CMakeFiles/MyProject.dir/bin/Eng.cpp.o: \
- /home/oskar_2/Documents/projekt_4/Project-4/bin/Eng.cpp \
+CMakeFiles/MyProject.dir/src/Actors.cpp.o: \
+ /home/hubert/projects/projekt-4/src/Actors.cpp \
  /usr/include/stdc-predef.h \
- /home/oskar_2/Documents/projekt_4/Project-4/include/Eng.h \
- /home/oskar_2/Documents/projekt_4/Project-4/include/Actors.h \
- /usr/include/X11/Xlib.h /usr/include/x86_64-linux-gnu/sys/types.h \
- /usr/include/features.h /usr/include/features-time64.h \
+ /home/hubert/projects/projekt-4/include/Actors.h /usr/include/X11/Xlib.h \
+ /usr/include/x86_64-linux-gnu/sys/types.h /usr/include/features.h \
+ /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
  /usr/include/x86_64-linux-gnu/bits/timesize.h \
  /usr/include/x86_64-linux-gnu/sys/cdefs.h \

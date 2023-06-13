@@ -1,17 +1,44 @@
 [
-{
-  "directory": "/home/oskar_2/Documents/projekt_4/Project-4/build",
-  "command": "/usr/bin/c++  -I/home/oskar_2/Documents/projekt_4/Project-4/include -g -std=gnu++23 -o CMakeFiles/MyProject.dir/bin/Actors.cpp.o -c /home/oskar_2/Documents/projekt_4/Project-4/bin/Actors.cpp",
-  "file": "/home/oskar_2/Documents/projekt_4/Project-4/bin/Actors.cpp"
-},
-{
-  "directory": "/home/oskar_2/Documents/projekt_4/Project-4/build",
-  "command": "/usr/bin/c++  -I/home/oskar_2/Documents/projekt_4/Project-4/include -g -std=gnu++23 -o CMakeFiles/MyProject.dir/bin/Eng.cpp.o -c /home/oskar_2/Documents/projekt_4/Project-4/bin/Eng.cpp",
-  "file": "/home/oskar_2/Documents/projekt_4/Project-4/bin/Eng.cpp"
-},
-{
-  "directory": "/home/oskar_2/Documents/projekt_4/Project-4/build",
-  "command": "/usr/bin/c++  -I/home/oskar_2/Documents/projekt_4/Project-4/include -g -std=gnu++23 -o CMakeFiles/MyProject.dir/bin/main.cpp.o -c /home/oskar_2/Documents/projekt_4/Project-4/bin/main.cpp",
-  "file": "/home/oskar_2/Documents/projekt_4/Project-4/bin/main.cpp"
-}
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-I/home/hubert/projects/projekt-4/include",
+      "-std=gnu++20",
+      "-c",
+      "-o",
+      "CMakeFiles/MyProject.dir/src/Actors.cpp.o",
+      "/home/hubert/projects/projekt-4/src/Actors.cpp"
+    ],
+    "directory": "/home/hubert/projects/projekt-4/build",
+    "file": "/home/hubert/projects/projekt-4/src/Actors.cpp",
+    "output": "/home/hubert/projects/projekt-4/build/CMakeFiles/MyProject.dir/src/Actors.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-I/home/hubert/projects/projekt-4/include",
+      "-std=gnu++20",
+      "-c",
+      "-o",
+      "CMakeFiles/MyProject.dir/src/Eng.cpp.o",
+      "/home/hubert/projects/projekt-4/src/Eng.cpp"
+    ],
+    "directory": "/home/hubert/projects/projekt-4/build",
+    "file": "/home/hubert/projects/projekt-4/src/Eng.cpp",
+    "output": "/home/hubert/projects/projekt-4/build/CMakeFiles/MyProject.dir/src/Eng.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-I/home/hubert/projects/projekt-4/include",
+      "-std=gnu++20",
+      "-c",
+      "-o",
+      "CMakeFiles/MyProject.dir/src/main.cpp.o",
+      "/home/hubert/projects/projekt-4/src/main.cpp"
+    ],
+    "directory": "/home/hubert/projects/projekt-4/build",
+    "file": "/home/hubert/projects/projekt-4/src/main.cpp",
+    "output": "/home/hubert/projects/projekt-4/build/CMakeFiles/MyProject.dir/src/main.cpp.o"
+  }
 ]
