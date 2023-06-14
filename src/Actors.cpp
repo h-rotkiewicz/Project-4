@@ -69,40 +69,21 @@ void Button::draw(Display *disp, long unsigned back_buff, GC const &gc) const{
     XFillRectangle(disp, back_buff, gc, x_, y_, length_, width_);
 }
 
-void Button::press(){
-    pressed_ = true;
-}
-
-void Button::release(){
-    pressed_ = false;
-}
-
-bool Button::is_pressed() const{
-    return pressed_;
+void Button::press(ObjectObserver const& obs){
+    std::cout << "Button pressed" << Locations::convert_to_y(level_) <<std::endl;
+    obs.get_elevator()->set_target(0,Locations::convert_to_y(level_));
 }
 
 Locations::Level Button::get_level() const{
     return level_;
-}   
-
-void Human::draw(Display *disp, long unsigned back_buff, GC const &gc) const{}
-
-void Human::move(){
-    x_ < x_target_ ? x_=+speed_ : x_-=speed_;
-    y_ < y_target_ ? y_=+speed_ : y_-=speed_;
 }
-
-
 
 template <is_IDrawable T >
 inline auto ObjectFactory(int width, int height,int x,int y, Locations::Level level) {
-    using ReturnType = std::conditional_t<std::is_base_of_v<IMoveable, T>,
-          std::unique_ptr<IMoveable>,
-          std::unique_ptr<IDrawable>>;
     if constexpr (std::is_same_v<Button, T>)
-        return ReturnType(std::make_unique<T>(width, height, x, y, level));
+        return std::make_unique<T>(width, height, x, y, level); // Button is not of an abstract type and can't have an interface
     else
-    return ReturnType(std::make_unique<T>(width, height, x, y));
+        return std::make_unique<T>(width, height, x, y);
 }
 
 void ObjectObserver::create_floors(int window_width, int window_height, int number_of_floors){
@@ -138,9 +119,14 @@ void ObjectObserver::add_object(int width, int height,int x, int y, Locations::L
             {
                 if constexpr (std::is_same_v<OBJECT, Elevator>)
                 {
-                    elevator_index_ = moveable_container_.size();
+                    elevator_ = moveable_container_.size();
                 }
                 moveable_container_.push_back(ObjectFactory<OBJECT>(width,height,x,y));
+            }
+            else if constexpr (std::is_same_v<OBJECT, Button>)
+            {
+                button_container_.push_back(ObjectFactory<OBJECT>(width,height,x,y, level));
+                return;
             }
             else{
                 container_.push_back(ObjectFactory<OBJECT>(width,height,x,y));

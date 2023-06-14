@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/hubert/projects/projekt-4/include
 
-CXX_FLAGS = -std=gnu++20
+CXX_FLAGS = -std=gnu++20 -g
 

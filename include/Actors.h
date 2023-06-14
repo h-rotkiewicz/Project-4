@@ -7,6 +7,9 @@
 #include <iostream>
 #include <type_traits>
 
+
+class ObjectObserver;
+
 static consteval double get_dt() {
     return 0.001;
 } 
@@ -23,6 +26,8 @@ class IDrawable{
         IDrawable(uint length, uint width,  int x, int y): length_(length), width_(width),  x_(x), y_(y) {}
         int get_x() const;
         int get_y() const;
+        uint get_length() const { return length_;}   
+        uint get_width() const{ return width_;}
         virtual ~IDrawable() = default;
 };
 
@@ -83,8 +88,8 @@ struct Locations{
         FOURTH,
         FIFTH,
     };
-    int operator =(Level const &rhs){
-        return (int)rhs * spaceing_; 
+    static int convert_to_y(Level level) {
+        return (int)level * spaceing_; 
     }
     private:
     static const int spaceing_ ;
@@ -93,13 +98,11 @@ struct Locations{
 class Button : public IDrawable {
     private:
         Locations::Level level_;
-        bool pressed_ = false;
         void draw(Display *disp, long unsigned back_buff, GC const &gc) const;
+        friend class DisplayManager; // only draw objects from DisplayManager 
     public:
         Button(uint length, uint width,  int x, int y, Locations::Level level): IDrawable(length, width, x, y), level_(level) {}
-        bool is_pressed() const;
-        void press();
-        void release();
+        void press(ObjectObserver const &);
         Locations::Level get_level() const;
 };
 
@@ -115,17 +118,19 @@ inline auto ObjectFactory(int width, int height,int x,int y, Locations::Level le
 
 class ObjectObserver{
     private:
+        using index = int;
         std::vector<std::unique_ptr<IDrawable>> container_;
         std::vector<std::unique_ptr<IMoveable>> moveable_container_;
+        std::vector<std::unique_ptr<Button>> button_container_;
         const int floor_width = 20;
         const int floor_length = 200;
         const int elevator_width = 200;
         const int elevator_height = 120;
         int floor_spacing_ = 0;
-        int elevator_index_ = -1;
+        index elevator_ = -1;
     public:
         template <is_IDrawable OBJECT>
-            void add_object(int width, int height,int x, int y,
+            void add_object(int width, int height,int x,int y,
                     Locations::Level level =Locations::Level::NONE);
 
         auto& get_moveable() const {
@@ -135,16 +140,32 @@ class ObjectObserver{
         auto& get_drawable() const {
             return container_;
         }
+        
+        void was_button_pressed(int x, int y) const {
+            for(auto const &button : button_container_){
+                if(true){
+                    button->press(*this);
+                }
+            }
+        }
+    
+        auto & get_buttons()const {
+            return button_container_;
+        }
 
         auto& get_elevator() const {
-            if (elevator_index_ == -1){
+            if (elevator_ == -1){
                 throw std::runtime_error("Elevator not found");
             }
-            return moveable_container_[elevator_index_]; 
+            return moveable_container_[elevator_]; 
         }
 
         void create_floors(int window_width, int window_height, int number_of_floors);
         void create_elevator(int window_width, int window_height);
         void create_buttons(int window_width, int window_height, int number_of_floors);
+};
+
+class ButtonHandler {
+    
 };
 

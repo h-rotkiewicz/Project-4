@@ -25,11 +25,32 @@ class DisplayManager {
     bool double_buffering_ = true;
     DisplayManager();
     public:
-    static constexpr uint window_width_ = 600; 
-    static constexpr uint window_height_ = 700;
-    static constexpr uint border_width_ = 0;
+    static constexpr uint window_width = 600; 
+    static constexpr uint window_height = 700;
+    static constexpr uint border_width = 0;
     static DisplayManager& GetInstance();
+
     ~DisplayManager();
+    void handle_events(ObjectObserver const &obs)
+    {
+        if(XPending(disp_.get())){
+            XNextEvent(disp_.get(), &event_);
+            if (event_.type == Expose)
+            {
+                //write starting screen or something
+            }
+            if (event_.type == KeyPress && event_.xkey.keycode == 33) //for debug
+            {
+                obs.get_elevator()->set_target(1,1);
+            }
+            
+                if(event_.type == ButtonPress)
+                {
+                    std::cout << "Button pressed " << event_.xbutton.x << " " << event_.xbutton.y <<std::endl;
+                    obs.was_button_pressed(event_.xbutton.x, event_.xbutton.y);    
+                }
+        }
+    }
     void swap_buffers();
     void render_objects(ObjectObserver const &obs)
     {
@@ -42,22 +63,12 @@ class DisplayManager {
             i->move();
         }
 
-        if(XPending(disp_.get())){
-            XNextEvent(disp_.get(), &event_);
-            if (event_.type == Expose)
-            {
-                //write starting screen or something
-            }
-
-            //key press p
-            if (event_.type == KeyPress && event_.xkey.keycode == 33)
-            {
-                obs.get_elevator()->set_target(1,1);
-            }
+        for(auto& i : obs.get_buttons()){
+            i->draw(disp_.get(),*chosen_buffer_,gc_);
         }
+        handle_events(obs);
         swap_buffers();
     }
-
     DisplayManager(const DisplayManager&) = delete;
     DisplayManager& operator=(const DisplayManager&) = delete;
     DisplayManager& operator=(DisplayManager&&)=delete;

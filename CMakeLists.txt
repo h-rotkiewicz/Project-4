@@ -4,7 +4,7 @@ project(MyProject)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS ON)
-set(DEBUG_FLAGS "-g -O0 -Wall -Wextra -Wpedantic -Werror")
+set(DEBUG_FLAGS "-g")
 
 include_directories(include)
 
@@ -21,3 +21,5 @@ find_library(XEXT_LIBRARY Xext)
 if(XEXT_LIBRARY)
   target_link_libraries(MyProject ${XEXT_LIBRARY})
 endif()
+
+target_compile_options(MyProject PRIVATE ${DEBUG_FLAGS})

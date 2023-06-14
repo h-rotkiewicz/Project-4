@@ -5,12 +5,11 @@ DisplayManager::DisplayManager() {
             throw std::runtime_error("Failed to open X11 display");
         }
         screen_ = DefaultScreen(disp_.get());
-        window_ = XCreateSimpleWindow(disp_.get(), RootWindow(disp_.get(), screen_), 0,0 ,window_width_ ,window_height_ , 
-                border_width_, BlackPixel(disp_.get(), screen_), WhitePixel(disp_.get(), screen_));
-        XSelectInput(disp_.get(), window_, ExposureMask | KeyPressMask);
+        window_ = XCreateSimpleWindow(disp_.get(), RootWindow(disp_.get(), screen_), 0,0 ,window_width ,window_height , 
+                border_width, BlackPixel(disp_.get(), screen_), WhitePixel(disp_.get(), screen_));
+        XSelectInput(disp_.get(), window_,  ButtonPressMask | KeyPressMask);
         XMapWindow(disp_.get(), window_);
         gc_ = XCreateGC(disp_.get(), window_, 0, 0);
-
         if(!XdbeQueryExtension(disp_.get() ,&major_, &minor_)) {
             std::cerr << "Double buffering not supported\n";
             std::cerr << "Proceeding with single buffer\n";

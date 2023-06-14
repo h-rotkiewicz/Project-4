@@ -2131,7 +2131,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "X11_Xcomposite_INCLUDE_PATH-NOTFOUND"
+			"value" : "/usr/include"
 		},
 		{
 			"name" : "X11_Xcomposite_LIB",
@@ -2147,7 +2147,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "X11_Xcomposite_LIB-NOTFOUND"
+			"value" : "/usr/lib/x86_64-linux-gnu/libXcomposite.so"
 		},
 		{
 			"name" : "X11_Xcursor_INCLUDE_PATH",
@@ -2195,7 +2195,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "X11_Xdamage_INCLUDE_PATH-NOTFOUND"
+			"value" : "/usr/include"
 		},
 		{
 			"name" : "X11_Xdamage_LIB",
@@ -2211,7 +2211,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "X11_Xdamage_LIB-NOTFOUND"
+			"value" : "/usr/lib/x86_64-linux-gnu/libXdamage.so"
 		},
 		{
 			"name" : "X11_Xdmcp_INCLUDE_PATH",
@@ -2675,7 +2675,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "X11_Xtst_INCLUDE_PATH-NOTFOUND"
+			"value" : "/usr/include"
 		},
 		{
 			"name" : "X11_Xtst_LIB",
@@ -2691,7 +2691,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "X11_Xtst_LIB-NOTFOUND"
+			"value" : "/usr/lib/x86_64-linux-gnu/libXtst.so"
 		},
 		{
 			"name" : "X11_Xutil_INCLUDE_PATH",
@@ -2867,7 +2867,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "X11_xcb_icccm_INCLUDE_PATH-NOTFOUND"
+			"value" : "/usr/include"
 		},
 		{
 			"name" : "X11_xcb_icccm_LIB",
@@ -2883,7 +2883,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "X11_xcb_icccm_LIB-NOTFOUND"
+			"value" : "/usr/lib/x86_64-linux-gnu/libxcb-icccm.so"
 		},
 		{
 			"name" : "X11_xcb_keysyms_INCLUDE_PATH",
@@ -2899,7 +2899,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "X11_xcb_keysyms_INCLUDE_PATH-NOTFOUND"
+			"value" : "/usr/include"
 		},
 		{
 			"name" : "X11_xcb_keysyms_LIB",
@@ -2915,7 +2915,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "X11_xcb_keysyms_LIB-NOTFOUND"
+			"value" : "/usr/lib/x86_64-linux-gnu/libxcb-keysyms.so"
 		},
 		{
 			"name" : "X11_xcb_randr_INCLUDE_PATH",
@@ -2963,7 +2963,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "X11_xcb_util_INCLUDE_PATH-NOTFOUND"
+			"value" : "/usr/include"
 		},
 		{
 			"name" : "X11_xcb_util_LIB",
@@ -2979,7 +2979,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "X11_xcb_util_LIB-NOTFOUND"
+			"value" : "/usr/lib/x86_64-linux-gnu/libxcb-util.so"
 		},
 		{
 			"name" : "X11_xcb_xfixes_INCLUDE_PATH",
