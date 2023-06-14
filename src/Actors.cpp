@@ -36,6 +36,7 @@ void IMoveable::set_pos(int x, int y){
     x_ = x;
     y_ = y;
 }
+
 void Elevator::move() {
     static double buffer = 0;
     if(x_target_ < 0 || y_target_ < 0) 
@@ -44,15 +45,13 @@ void Elevator::move() {
     if(buffer <= 1)
         return;
     else {
-
         if(speed_ < max_speed_)
-            speed_ = std::min(speed_ + buffer, static_cast<double>(max_speed_));
-        
+            speed_ += buffer;
         double distance_to_target = std::abs(y_ - y_target_);
-        double threshold_distance = 10.0; 
-        if (distance_to_target <= threshold_distance) {
-            double deceleration_factor = distance_to_target / threshold_distance;
-            speed_ *= deceleration_factor;
+        double threshold = 5; 
+        if (distance_to_target <= threshold) {
+            double deceleration = distance_to_target / threshold;
+            speed_ *= deceleration;
         }
         y_ <= y_target_ ? y_+=speed_ : y_-=speed_;
         buffer = 0;
