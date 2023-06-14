@@ -36,8 +36,8 @@ class IMoveable : public IDrawable{
         friend class DisplayManager; // only draw objects from DisplayManager 
         int x_target_ =-1;
         int y_target_ =-1;
-        double speed_ = 1;
-        int max_speed_ = 10;
+        int speed_ = 1;
+        int max_speed_ = 5;
         double acceleration_ = speed_ * get_dt();
     public:
         virtual void move() = 0;
@@ -101,7 +101,7 @@ class Button : public IDrawable { // button doesn't need an Interface but to not
         void draw(Display *disp, long unsigned back_buff, GC const &gc) const;
         friend class DisplayManager; // only draw objects from DisplayManager 
     public:
-        Button(uint length, uint width,  int x, int y, Locations::Level level): IDrawable(length, width, x, y), level_(level) {}
+        Button(uint length, uint width,  int x, Locations::Level level): IDrawable(length, width, x, Locations::convert_to_y(level)), level_(level) {}
         void press(ObjectObserver const &);
         Locations::Level get_level() const;
 };

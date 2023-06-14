@@ -43,12 +43,10 @@ class DisplayManager {
             {
                 obs.get_elevator()->set_target(1,1);
             }
-            
-                if(event_.type == ButtonPress)
-                {
-                    std::cout << "Button pressed " << event_.xbutton.x << " " << event_.xbutton.y <<std::endl;
-                    obs.was_button_pressed(event_.xbutton.x, event_.xbutton.y);    
-                }
+            if(event_.type == ButtonPress)
+            {
+                obs.was_button_pressed(event_.xbutton.x, event_.xbutton.y);    
+            }
         }
     }
     void swap_buffers();

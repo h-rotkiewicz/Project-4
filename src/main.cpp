@@ -2,7 +2,7 @@
 
 
 constexpr static auto number_of_floors = 3;
-const int Locations::spaceing_ = number_of_floors/DisplayManager::window_height;
+const int Locations::spaceing_ = DisplayManager::window_height/number_of_floors;
 
 int main() {
     try{

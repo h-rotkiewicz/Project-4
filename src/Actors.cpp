@@ -1,4 +1,5 @@
 #include "Actors.h"
+#include <algorithm>
 #include <iostream>
 int IDrawable::get_x() const {
     return x_;
@@ -35,33 +36,27 @@ void IMoveable::set_pos(int x, int y){
     x_ = x;
     y_ = y;
 }
-
-void Elevator::move(){
-    static double buffer = 0; // since gc_.x is int, we need to accumulate the speed
+void Elevator::move() {
+    static double buffer = 0;
     if(x_target_ < 0 || y_target_ < 0) 
         return;
     buffer += acceleration_;
     if(buffer <= 1)
         return;
     else {
+
         if(speed_ < max_speed_)
-            speed_ += buffer;
- // I don't know why it's 9, but it works                                                              
- // have to figure out why I don't know                                                                
- // no variable is equal to 9                                                                          
- // this is needed so the elevator doesn't                                                             
- // wobble when it stops                                                                               
- // use the set target function to set the target                                                      
- // elevator will only consider the y coordinate                                                       
- // and human will consider both x and y                 {
-        if(y_ == y_target_ + 9|| y_ == y_target_ - 9) 
-        {
-            speed_ = 0;
-        }       
-        y_ <= y_target_ ? y_=+speed_ : y_-=speed_;
+            speed_ = std::min(speed_ + buffer, static_cast<double>(max_speed_));
+        
+        double distance_to_target = std::abs(y_ - y_target_);
+        double threshold_distance = 10.0; 
+        if (distance_to_target <= threshold_distance) {
+            double deceleration_factor = distance_to_target / threshold_distance;
+            speed_ *= deceleration_factor;
+        }
+        y_ <= y_target_ ? y_+=speed_ : y_-=speed_;
         buffer = 0;
     }
-
 }
 
 void Button::draw(Display *disp, long unsigned back_buff, GC const &gc) const{
@@ -81,7 +76,7 @@ Locations::Level Button::get_level() const{
 template <is_IDrawable T >
 inline auto ObjectFactory(int width, int height,int x,int y, Locations::Level level) {
     if constexpr (std::is_same_v<Button, T>)
-        return std::make_unique<T>(width, height, x, y, level); // Button is not of an abstract type and can't have an interface
+        return std::make_unique<T>(width, height, x,level); // Button is not of an abstract type and can't have an interface
     else
         return std::make_unique<T>(width, height, x, y);
 }
@@ -109,7 +104,8 @@ void ObjectObserver::create_elevator(int window_width, int window_height){
 void ObjectObserver::create_buttons(int window_width, int window_height, int number_of_floors){
         int k = 1;
         for(int i = 0; i < number_of_floors; k++, i++){
-            add_object<Button>(100, 100,1, 1, (Locations::Level)k);
+            add_object<Button>(50, 50, floor_length/2, k*floor_spacing_-floor_width,(Locations::Level)k);
+            std::cout << "Button created" << Locations::convert_to_y((Locations::Level)k) <<std::endl;
         }
 }
 
