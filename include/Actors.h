@@ -95,7 +95,7 @@ struct Locations{
     static const int spaceing_ ;
 };
 
-class Button : public IDrawable {
+class Button : public IDrawable { // button doesn't need an Interface but to not repeat code it is easier to simply inherit from IDrawable
     private:
         Locations::Level level_;
         void draw(Display *disp, long unsigned back_buff, GC const &gc) const;
@@ -142,8 +142,9 @@ class ObjectObserver{
         }
         
         void was_button_pressed(int x, int y) const {
-            for(auto const &button : button_container_){
-                if(true){
+            for (auto &button : button_container_){
+                if (button->get_x() <= x && button->get_x() + button->get_length() >= x &&
+                        button->get_y() <= y && button->get_y() + button->get_width() >= y){
                     button->press(*this);
                 }
             }
