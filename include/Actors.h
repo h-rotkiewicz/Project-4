@@ -1,3 +1,4 @@
+#pragma once
 #include <X11/Xlib.h>
 #include <X11/extensions/Xdbe.h> // for double buffering
 #include <X11/Xutil.h>
@@ -72,6 +73,37 @@ class Human : public IMoveable{
         Human(uint length, uint width,  int x, int y): IMoveable(length, width, x, y) {}
 };
 
+struct Locations{
+    enum Level {
+        NONE = -1,
+        GROUND,
+        FIRST,
+        SECOND,
+        THIRD,
+        FOURTH,
+        FIFTH,
+    };
+    int operator =(Level const &rhs){
+        return (int)rhs * spaceing_; 
+    }
+    private:
+    static const int spaceing_ ;
+};
+
+class Button : public IDrawable {
+    private:
+        Locations::Level level_;
+        bool pressed_ = false;
+        void draw(Display *disp, long unsigned back_buff, GC const &gc) const;
+    public:
+        Button(uint length, uint width,  int x, int y, Locations::Level level): IDrawable(length, width, x, y), level_(level) {}
+        bool is_pressed() const;
+        void press();
+        void release();
+        Locations::Level get_level() const;
+};
+
+
 //since 2 objects have nearly the same constructor, we can use a template to avoid code duplication
 //in case elevator or person object has different constructors, we will have to rewrite this
 template <typename T>
@@ -79,36 +111,40 @@ concept is_IDrawable = std::is_base_of_v<IDrawable, T>;
 
 //Return type deduction based on inheritance
 template <is_IDrawable T >
-inline auto ObjectFactory(int width, int height,int x,int y);
+inline auto ObjectFactory(int width, int height,int x,int y, Locations::Level level =Locations::Level::NONE);
 
 class ObjectObserver{
     private:
-    std::vector<std::unique_ptr<IDrawable>> container_;
-    std::vector<std::unique_ptr<IMoveable>> moveable_container_;
-    const int floor_width = 20;
-    const int floor_length = 200;
-    const int elevator_width = 200;
-    const int elevator_height = 120;
-    int elevator_index_ = -1;
+        std::vector<std::unique_ptr<IDrawable>> container_;
+        std::vector<std::unique_ptr<IMoveable>> moveable_container_;
+        const int floor_width = 20;
+        const int floor_length = 200;
+        const int elevator_width = 200;
+        const int elevator_height = 120;
+        int floor_spacing_ = 0;
+        int elevator_index_ = -1;
     public:
-    template <is_IDrawable OBJECT>
-        void add_object(int width, int height,int x, int y);
+        template <is_IDrawable OBJECT>
+            void add_object(int width, int height,int x, int y,
+                    Locations::Level level =Locations::Level::NONE);
 
-    auto& get_moveable() const {
-    return moveable_container_;
-    }
-
-    auto& get_drawable() const {
-        return container_;
-    }
-
-    auto& get_elevator() const {
-        if (elevator_index_ == -1){
-            throw std::runtime_error("Elevator not found");
+        auto& get_moveable() const {
+            return moveable_container_;
         }
-        return moveable_container_[elevator_index_]; 
-    }
 
-    void create_floors(int window_width, int window_height, int number_of_floors);
-    void create_elevator(int window_width, int window_height);
+        auto& get_drawable() const {
+            return container_;
+        }
+
+        auto& get_elevator() const {
+            if (elevator_index_ == -1){
+                throw std::runtime_error("Elevator not found");
+            }
+            return moveable_container_[elevator_index_]; 
+        }
+
+        void create_floors(int window_width, int window_height, int number_of_floors);
+        void create_elevator(int window_width, int window_height);
+        void create_buttons(int window_width, int window_height, int number_of_floors);
 };
+

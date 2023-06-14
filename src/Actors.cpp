@@ -1,6 +1,5 @@
 #include "Actors.h"
 #include <iostream>
-
 int IDrawable::get_x() const {
     return x_;
 }
@@ -65,6 +64,27 @@ void Elevator::move(){
 
 }
 
+void Button::draw(Display *disp, long unsigned back_buff, GC const &gc) const{
+    XSetForeground(disp, gc, 0x000000);
+    XFillRectangle(disp, back_buff, gc, x_, y_, length_, width_);
+}
+
+void Button::press(){
+    pressed_ = true;
+}
+
+void Button::release(){
+    pressed_ = false;
+}
+
+bool Button::is_pressed() const{
+    return pressed_;
+}
+
+Locations::Level Button::get_level() const{
+    return level_;
+}   
+
 void Human::draw(Display *disp, long unsigned back_buff, GC const &gc) const{}
 
 void Human::move(){
@@ -75,25 +95,28 @@ void Human::move(){
 
 
 template <is_IDrawable T >
-inline auto ObjectFactory(int width, int height,int x,int y) {
+inline auto ObjectFactory(int width, int height,int x,int y, Locations::Level level) {
     using ReturnType = std::conditional_t<std::is_base_of_v<IMoveable, T>,
           std::unique_ptr<IMoveable>,
           std::unique_ptr<IDrawable>>;
-        return ReturnType(std::make_unique<T>(width, height, x, y));
+    if constexpr (std::is_same_v<Button, T>)
+        return ReturnType(std::make_unique<T>(width, height, x, y, level));
+    else
+    return ReturnType(std::make_unique<T>(width, height, x, y));
 }
 
 void ObjectObserver::create_floors(int window_width, int window_height, int number_of_floors){
-        int floor_spacing = window_height/(number_of_floors);
+        floor_spacing_ = window_height/(number_of_floors);
 
         //left
         int k = 1;
         for(int i = 0; i < number_of_floors;k++, i++){
-            add_object<Floor>(floor_length,floor_width,0, k*floor_spacing-floor_width);
+            add_object<Floor>(floor_length,floor_width,0, k*floor_spacing_-floor_width);
         }
 
         //right
         for(int i = number_of_floors/2, k=1; i < number_of_floors; k++,i++){
-            add_object<Floor>(floor_length, floor_width,window_width-floor_length, k*floor_spacing+floor_spacing/2-floor_width);
+            add_object<Floor>(floor_length, floor_width,window_width-floor_length, k*floor_spacing_+floor_spacing_/2-floor_width);
         }
 }
 
@@ -102,8 +125,15 @@ void ObjectObserver::create_elevator(int window_width, int window_height){
 
 }
 
+void ObjectObserver::create_buttons(int window_width, int window_height, int number_of_floors){
+        int k = 1;
+        for(int i = 0; i < number_of_floors; k++, i++){
+            add_object<Button>(100, 100,1, 1, (Locations::Level)k);
+        }
+}
+
 template <is_IDrawable OBJECT>
-void ObjectObserver::add_object(int width, int height,int x, int y){
+void ObjectObserver::add_object(int width, int height,int x, int y, Locations::Level level){
             if constexpr (std::is_base_of_v<IMoveable, OBJECT>)
             {
                 if constexpr (std::is_same_v<OBJECT, Elevator>)

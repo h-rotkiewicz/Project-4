@@ -12,9 +12,6 @@ inline auto WindowDeleter = [](Display* disp) noexcept {
 
 //Singleton class for managing X11 display and window
 class DisplayManager {
-    const uint window_width_ = 600; 
-    const uint window_height_ = 700;
-    const uint border_width_ = 0;
     std::unique_ptr<Display, decltype(WindowDeleter)> disp_  = {XOpenDisplay(nullptr), WindowDeleter};
     Window window_;
     XdbeBackBuffer back_buffer_;
@@ -28,9 +25,10 @@ class DisplayManager {
     bool double_buffering_ = true;
     DisplayManager();
     public:
+    static constexpr uint window_width_ = 600; 
+    static constexpr uint window_height_ = 700;
+    static constexpr uint border_width_ = 0;
     static DisplayManager& GetInstance();
-    int get_width() const;
-    int get_height() const;
     ~DisplayManager();
     void swap_buffers();
     void render_objects(ObjectObserver const &obs)

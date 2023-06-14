@@ -1,7 +1,6 @@
 #include "Eng.h"
 
 DisplayManager::DisplayManager() { 
-        
         if(!disp_) {
             throw std::runtime_error("Failed to open X11 display");
         }
@@ -40,14 +39,6 @@ void DisplayManager::swap_buffers(){
     else {
         XFlush(disp_.get());
     }
-}
-
-int DisplayManager::get_height() const {
-    return window_height_;
-}
-
-int DisplayManager::get_width() const {
-    return window_width_;
 }
 
 DisplayManager::~DisplayManager(){
