@@ -538,6 +538,8 @@ CMakeFiles/MyProject.dir/src/Eng.cpp.o
  /usr/include/c++/11/iostream
  /usr/include/c++/11/istream
  /usr/include/c++/11/bits/istream.tcc
+ /usr/include/X11/extensions/sync.h
+ /usr/include/X11/extensions/syncconst.h
 
 CMakeFiles/MyProject.dir/src/main.cpp.o
  /home/hubert/projects/projekt-4/src/main.cpp
@@ -801,4 +803,6 @@ CMakeFiles/MyProject.dir/src/main.cpp.o
  /usr/include/c++/11/iostream
  /usr/include/c++/11/istream
  /usr/include/c++/11/bits/istream.tcc
+ /usr/include/X11/extensions/sync.h
+ /usr/include/X11/extensions/syncconst.h
 

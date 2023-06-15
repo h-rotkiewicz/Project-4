@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
-#include <type_traits>
+#include <array>
 
 
 class ObjectObserver;
@@ -107,8 +107,6 @@ class Button : public IDrawable { // button doesn't need an Interface but to not
 };
 
 
-//since 2 objects have nearly the same constructor, we can use a template to avoid code duplication
-//in case elevator or person object has different constructors, we will have to rewrite this
 template <typename T>
 concept is_IDrawable = std::is_base_of_v<IDrawable, T>;
 
@@ -119,16 +117,20 @@ inline auto ObjectFactory(int width, int height,int x,int y, Locations::Level le
 class ObjectObserver{
     private:
         using index = int;
-        std::vector<std::unique_ptr<IDrawable>> container_;
+        const int   floor_width                         = 20;
+        const int   floor_length                        = 200;
+        const int   elevator_width                      = 200;
+        const int   elevator_height                     = 120;
+              int   floor_spacing_                      = 0;
+              index elevator_                           = -1;
+        static constexpr int number_drawable_objects_   = 5; // contsexpr is needed for array size
+
+        std::array<std::unique_ptr<IDrawable>,  number_drawable_objects_> container_; // number of floors is know at compile time so no need for dynamic allocation
         std::vector<std::unique_ptr<IMoveable>> moveable_container_;
-        std::vector<std::unique_ptr<Button>> button_container_;
-        const int floor_width = 20;
-        const int floor_length = 200;
-        const int elevator_width = 200;
-        const int elevator_height = 120;
-        int floor_spacing_ = 0;
-        index elevator_ = -1;
+        std::vector<std::unique_ptr<Button>>    button_container_;
+
     public:
+
         template <is_IDrawable OBJECT>
             void add_object(int width, int height,int x,int y,
                     Locations::Level level =Locations::Level::NONE);
@@ -150,7 +152,7 @@ class ObjectObserver{
             }
         }
     
-        auto & get_buttons()const {
+        auto & get_buttons() const {
             return button_container_;
         }
 
@@ -161,9 +163,9 @@ class ObjectObserver{
             return moveable_container_[elevator_]; 
         }
 
-        void create_floors(int window_width, int window_height, int number_of_floors);
-        void create_elevator(int window_width, int window_height);
-        void create_buttons(int window_width, int window_height, int number_of_floors);
+        void create_floors   (int window_width, int window_height, int number_of_floors);
+        void create_elevator (int window_width, int window_height);
+        void create_buttons  (int window_width, int window_height, int number_of_floors);
 };
 
 class ButtonHandler {

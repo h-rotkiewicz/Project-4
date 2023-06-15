@@ -124,6 +124,10 @@ void ObjectObserver::add_object(int width, int height,int x, int y, Locations::L
                 return;
             }
             else{
-                container_.push_back(ObjectFactory<OBJECT>(width,height,x,y));
+                static int index = 0;
+                if(index >=container_.size())
+                    throw std::out_of_range("Index out of range");
+                container_[index++] = ObjectFactory<OBJECT>(width,height,x,y);
+
             }
 }

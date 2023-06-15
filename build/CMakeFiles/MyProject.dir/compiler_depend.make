@@ -535,7 +535,9 @@ CMakeFiles/MyProject.dir/src/Eng.cpp.o: /home/hubert/projects/projekt-4/src/Eng.
   /usr/include/c++/11/pstl/execution_defs.h \
   /usr/include/c++/11/iostream \
   /usr/include/c++/11/istream \
-  /usr/include/c++/11/bits/istream.tcc
+  /usr/include/c++/11/bits/istream.tcc \
+  /usr/include/X11/extensions/sync.h \
+  /usr/include/X11/extensions/syncconst.h
 
 CMakeFiles/MyProject.dir/src/main.cpp.o: /home/hubert/projects/projekt-4/src/main.cpp \
   /usr/include/stdc-predef.h \
@@ -797,8 +799,12 @@ CMakeFiles/MyProject.dir/src/main.cpp.o: /home/hubert/projects/projekt-4/src/mai
   /usr/include/c++/11/pstl/execution_defs.h \
   /usr/include/c++/11/iostream \
   /usr/include/c++/11/istream \
-  /usr/include/c++/11/bits/istream.tcc
+  /usr/include/c++/11/bits/istream.tcc \
+  /usr/include/X11/extensions/sync.h \
+  /usr/include/X11/extensions/syncconst.h
 
+
+/usr/include/X11/extensions/syncconst.h:
 
 /home/hubert/projects/projekt-4/src/Eng.cpp:
 
@@ -867,6 +873,8 @@ CMakeFiles/MyProject.dir/src/main.cpp.o: /home/hubert/projects/projekt-4/src/mai
 /usr/include/c++/11/bits/ostream.tcc:
 
 /usr/include/c++/11/bits/basic_ios.tcc:
+
+/usr/include/X11/extensions/sync.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h:
 

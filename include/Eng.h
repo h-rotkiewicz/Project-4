@@ -1,4 +1,5 @@
 #include "Actors.h"
+#include <X11/extensions/sync.h>
 #include <iostream>
 #include <string>
 #include <utility>
@@ -17,10 +18,9 @@ class DisplayManager {
     XdbeBackBuffer back_buffer_;
     long unsigned *chosen_buffer_;
     XEvent event_;
+    
     GC gc_;
     int screen_;
-    int minor_;
-    int major_;
     XdbeSwapInfo swap_info_;
     bool double_buffering_ = true;
     DisplayManager();
@@ -39,11 +39,7 @@ class DisplayManager {
             {
                 //write starting screen or something
             }
-            if (event_.type == KeyPress && event_.xkey.keycode == 33) //for debug
-            {
-                obs.get_elevator()->set_target(1,1);
-            }
-            if(event_.type == ButtonPress)
+            else if(event_.type == ButtonPress)
             {
                 obs.was_button_pressed(event_.xbutton.x, event_.xbutton.y);    
             }
@@ -52,19 +48,20 @@ class DisplayManager {
     void swap_buffers();
     void render_objects(ObjectObserver const &obs)
     {
-        for(auto& i : obs.get_drawable()){
+        for(auto const &i : obs.get_drawable()){
             i->draw(disp_.get(),*chosen_buffer_,gc_);
         }
 
-        for(auto& i : obs.get_moveable()){
+        for(auto const &i : obs.get_moveable()){
             i->draw(disp_.get(),*chosen_buffer_,gc_);
             i->move();
         }
 
-        for(auto& i : obs.get_buttons()){
+        for(auto const & i : obs.get_buttons()){
             i->draw(disp_.get(),*chosen_buffer_,gc_);
         }
         handle_events(obs);
+        XSync(disp_.get(), false);
         swap_buffers();
     }
     DisplayManager(const DisplayManager&) = delete;
